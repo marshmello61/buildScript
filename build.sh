@@ -4,6 +4,7 @@
 
 # ===================================
 # Set the parameters below
+
 # You need to set device by flag or set below
 DEVICE=""
 
@@ -28,6 +29,12 @@ RNAME=""
 # Do not change below
 FNAME="$RNAME*"
 ROM="$RNAME"
+
+# Set your telegram username below
+# If Your username is @marshmello_61
+# Then set marshmello_61
+TGNAME=""
+
 # Setting parameters end here
 # ===================================
 
@@ -86,6 +93,16 @@ done
 # If device flag not exist then exit
 if [[ -z ${DEVICE} ]]; then
     echo "You did not specify a device to build! This is mandatory parameter." && sleep 6 && exit
+fi
+
+# Prompt for telegram username if -t flag
+if [[ "${TG}" == "tg" ]]; then
+    if [ -z "${TGNAME}" ]
+    then
+       echo " "
+       echo -n "Your Telegram Username without @ : "
+       read TGNAME
+    fi
 fi
 
 # Set my own two roms. Coz why not
@@ -209,7 +226,7 @@ then
       then
          echo "Hey master, your build is done and ready to upload"
          if [[ "${TG}" == "tg" ]]; then
-             . buildScript/telegram "Well, the build is successful."$'\n'"Prompting to Mayur for uploading build"
+             . buildScript/telegram "Well, the build is successful."$'\n'"Prompting to @${TGNAME} for uploading build"
          fi
          echo ""
          if [[ "${UPLOAD}" == "upload" ]]; then
@@ -222,7 +239,7 @@ then
 	 #check file size
 	 size=$(ls -sh $OUT/$ZIP | awk '{print $1}')
          if [[ "${TG}" == "tg" ]]; then
-             . buildScript/telegram "The build is uploaded to Mayur's gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${ZIP}"$'\n'"Size- ${size}"$'\n'"md5sum- ${md5sum}"$'\n'" "$'\n'"If you wanna test, just tag @marshmello_61"
+             . buildScript/telegram "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${ZIP}"$'\n'"Size- ${size}"$'\n'"md5sum- ${md5sum}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
          fi
       else
          echo "Oopsemiee. Looks like something interrupted building"
@@ -231,7 +248,7 @@ then
          if [[ "${LOG}" == "log" ]]; then
              if  [[ -f "out/error.log" ]] && [[ -s "out/error.log" ]]; then
                   if [[ "${TG}" == "tg" ]]; then
-                      . buildScript/telegram "Bad news :(. The build has any error in compiling"$'\n'" "$'\n'"@marshmello_61 fix this."
+                      . buildScript/telegram "Bad news :(. The build has any error in compiling"$'\n'" "$'\n'"@${TGNAME} fix this."
                       . buildScript/telegram -f out/error.log | tee
                   fi
                   echo -n "Read log?: "
@@ -242,7 +259,7 @@ then
                   fi
              else
                   if [[ "${TG}" == "tg" ]]; then
-                      . buildScript/telegram "Build has cancelled by @marshmello_61"
+                      . buildScript/telegram "Build has cancelled by @${TGNAME}"
                   fi
              fi
          fi
