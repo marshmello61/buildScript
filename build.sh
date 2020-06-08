@@ -6,7 +6,7 @@
 # Set the parameters below
 
 # You need to set device by flag or set below
-DEVICE=""
+DEVICE="sanders"
 
 # Set the lunch command
 # Example: If °lunch aosp_sanders-userdebug°
@@ -27,7 +27,7 @@ MKA="mka bacon"
 RNAME=""
 
 # Do not change below
-FNAME="$RNAME*"
+FNAME="$RNAME*.zip"
 ROM="$RNAME"
 
 # Set your telegram username below
@@ -111,14 +111,14 @@ if [[ "${ROM}" == "derp" ]]; then
     echo "Setting up DerpFest parameters"
     LUNCH="derp"
     MKA="mka kronic"
-    FNAME="Derp*"
+    FNAME="Derp*.zip"
     RNAME="DerpFest"
 elif [[ "${ROM}" == "evo" ]]; then
     echo " "
     echo "Setting up Evolution-X parameters"
-    LUNCH"aosp"
+    LUNCH="aosp"
     MKA="mka bacon"
-    FNAME="Evol*"
+    FNAME="Evol*.zip"
     RNAME="Evolution-X"
 fi
 
@@ -148,8 +148,9 @@ then
    sleep 1
    echo -n "Yeah. So what's your rom's file initials?: "
    read RNAME
-   FNAME="$RNAME*"
+   FNAME="$RNAME*.zip"
    MKA="mka bacon"
+   ROM="$RNAME"
 fi
 
 rm -rf clean file bruu
@@ -158,7 +159,8 @@ if [ -z "${OUT}" ]
 then
    OUT=(out/target/product/${DEVICE})
 fi
-ZIP_PATH=$(find $OUT -maxdepth 1 -type f -name "${FNAME}.zip" | sed -n -e "1{p;q}")
+
+ZIP_PATH=$(find $OUT -maxdepth 1 -type f -name "${FNAME}" | sed -n -e "1{p;q}")
 ZIP=$(basename $ZIP_PATH)
 
 # Say hello to your master
@@ -167,18 +169,19 @@ echo "Hey Master, how are you ? Hope you having a good day..."
 echo " "
 
 # If file exsists then prompt to upload it, then prompt to delete existing file
-if [ -e ${ZIP_PATH} ]
+if [ -z ${ZIP_PATH} ]
 then
+   echo "File not exists"
+   sleep 3
+   mkdir file
+else
    echo "Your handmade Rom file exists"
    if [[ "${UPLOAD}" == "upload" ]]; then
        read -e -p "Do you want me to upload file? [y/n] " choice
        [[ "$choice" == [Yy]* ]] && echo "Uploading file...." && gdrive upload ${ZIP_PATH} && echo " " || echo "Okay master"
    fi
    read -e -p "Do you want me to delete the existing file? [y/n] " choice
-   [[ "$choice" == [Yy]* ]] && echo "Deleting file...." && cd o*/t*/p*/s* && rm -rf D*p && echo " " && cd ../../../.. && mkdir file || echo "that was a no, keeping file"
-else
-   mkdir file
-   echo ""
+   [[ "$choice" == [Yy]* ]] && echo "Deleting file...." && rm -rf ${ZIP_PATH} && echo " " && mkdir file || echo "that was a no, keeping file"
 fi
 
 if [[ "${TG}" == "tg" ]]; then
@@ -190,18 +193,19 @@ read -e -p "Do you want to build rom? [y/n] " choice
 [[ "$choice" == [Yy]* ]] && mkdir bruu || echo "Kekkk"
 
 if [ -e bruu ]
+then
    if [[ "${CLEAN}" == "clean" ]]; then
        echo " "
        echo "Clean building"
        rm -rf out
        if [[ "${TG}" == "tg" ]]; then
-       . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"If no error, it will be ready in almost 2 hours."
+           . buildScript/telegram "Good news everyone. Clean build of ${RNAME} started."$'\n'"If no error, it will be ready in almost 2 hours."
        fi
    else
        echo " "
        echo "Dirty building"
        if [[ "${TG}" == "tg" ]]; then
-       . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"It can be ready at anytime."
+           . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"It can be ready at anytime."
        fi
    fi
 fi
@@ -213,7 +217,7 @@ then
 fi
 
 
-ZIP_PATH=$(find $OUT -maxdepth 1 -type f -name "${FNAME}.zip" | sed -n -e "1{p;q}")
+ZIP_PATH=$(find $OUT -maxdepth 1 -type f -name "${FNAME}" | sed -n -e "1{p;q}")
 ZIP=$(basename $ZIP_PATH)
 # After build is done, it would appear in out directory
 # If file appears then would prompt for uploading
@@ -222,11 +226,13 @@ if [ -e bruu ]
 then
    if [ -e file ]
    then
-      if [ -e ${ZIP_PATH} ]
+      if [ -e ${OUT}/${FNAME} ]
       then
          echo "Hey master, your build is done and ready to upload"
          if [[ "${TG}" == "tg" ]]; then
-             . buildScript/telegram "Well, the build is successful."$'\n'"Prompting to @${TGNAME} for uploading build"
+             if [[ "${UPLOAD}" == "upload" ]]; then
+                 . buildScript/telegram "Well, the build is successful."$'\n'"Prompting to @${TGNAME} for uploading build"
+             fi
          fi
          echo ""
          if [[ "${UPLOAD}" == "upload" ]]; then
@@ -239,7 +245,9 @@ then
 	 #check file size
 	 size=$(ls -sh $OUT/$ZIP | awk '{print $1}')
          if [[ "${TG}" == "tg" ]]; then
-             . buildScript/telegram "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${ZIP}"$'\n'"Size- ${size}"$'\n'"md5sum- ${md5sum}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
+             if [[ "${UPLOAD}" == "upload" ]]; then
+                 . buildScript/telegram "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${ZIP}"$'\n'"Size- ${size}"$'\n'"md5sum- ${md5sum}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
+             fi
          fi
       else
          echo "Oopsemiee. Looks like something interrupted building"
