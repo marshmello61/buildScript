@@ -38,6 +38,11 @@ TGNAME=""
 # Setting parameters end here
 # ===================================
 
+CLEAN=""
+LOG=""
+TG=""
+UPLOAD=""
+
 # Parameters
 while [[ $# -gt 0 ]]
 do
@@ -100,7 +105,7 @@ if [[ "${TG}" == "tg" ]]; then
     if [ -z "${TGNAME}" ]
     then
        echo " "
-       echo -n "Your Telegram Username without @ : "
+       echo -n "Your Telegram Username: @"
        read TGNAME
     fi
 fi
