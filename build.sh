@@ -32,7 +32,7 @@ ROM="$RNAME"
 
 # Set your telegram username below
 # If Your username is @marshmello_61
-# Then set marshmello_61
+# Then set marshmello\_61
 TGNAME=""
 
 # Setting parameters end here
@@ -244,14 +244,18 @@ then
              read -e -p "Do you want me to upload file for you? [y/n] " choice
              [[ "$choice" == [Yy]* ]] && gdrive upload ${ZIP_PATH} && echo "Go and grab that shit from your gdrive" || echo "Fine. Upload it manually"
          fi
-	 #check md5sum
+
+         FILENAME='```'$''$ZIP$'''```'
+         #check md5sum
          md5sum=$(md5sum ${OUT}/${ZIP} | awk '{print $1}')
-	 #md5sum check done
-	 #check file size
-	 size=$(ls -sh $OUT/$ZIP | awk '{print $1}')
+         md5summ='```'$''$md5sum$'''```'
+         #md5sum check done
+         #check file size
+         size=$(ls -sh $OUT/$ZIP | awk '{print $1}')
+         sizee='```'$''$size$'''```'
          if [[ "${TG}" == "tg" ]]; then
              if [[ "${UPLOAD}" == "upload" ]]; then
-                 . buildScript/telegram "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${ZIP}"$'\n'"Size- ${size}"$'\n'"md5sum- ${md5sum}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
+                 . buildScript/telegram -M "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${FILENAME}"$'\n'"Size- ${sizee}"$'\n'"md5sum- ${md5summ}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
              fi
          fi
       else
