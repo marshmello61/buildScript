@@ -72,10 +72,10 @@ case $param in
     ROM="evo"
     ;;
     -h|--help)
-    echo "Usage: bash script/build.sh -d <device> [OPTION]
+    echo "Usage: bash buildScript/build.sh -d <device> [OPTION]
 
 Example:
-    bash script/build.sh -d sanders -l -c -t --derp
+    bash buildScript/build.sh -d sanders -l -c -t --derp
 
 Mandatory Parameters:
     -d, --device          device you want to build for
