@@ -253,9 +253,16 @@ then
          #check file size
          size=$(ls -sh $OUT/$ZIP | awk '{print $1}')
          sizee='```'$''$size$'''```'
+         # Telegram message only if upload exists
          if [[ "${TG}" == "tg" ]]; then
              if [[ "${UPLOAD}" == "upload" ]]; then
                  . buildScript/telegram -M "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${FILENAME}"$'\n'"Size- ${sizee}"$'\n'"md5sum- ${md5summ}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
+             fi
+         fi
+         # Telegram message only if upload not exists
+         if [[ "${TG}" == "tg" ]]; then
+             if [[ "${UPLOAD}" == "" ]]; then
+                 . buildScript/telegram -M "The build of ${ROM} is successful."$'\n'" "$'\n'"Name- ${FILENAME}"$'\n'"Size- ${sizee}"$'\n'"md5sum- ${md5summ}"
              fi
          fi
       else
