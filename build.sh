@@ -219,13 +219,13 @@ then
        echo "Clean building"
        rm -rf out
        if [[ "${TG}" == "tg" ]]; then
-           . buildScript/telegram "Good news everyone. Clean build of ${RNAME} started."$'\n'"If no error, it will be ready in almost 2 hours."
+           . buildScript/telegram "Good news everyone. Clean build of ${RNAME} started."$'\n'"If no error, it will be ready in some hours."$'\n'"Device: ${DEVICE}"
        fi
    else
        echo " "
        echo "Dirty building"
        if [[ "${TG}" == "tg" ]]; then
-           . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"It can be ready at anytime."
+           . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"It can be ready at anytime."$'\n'"Device: ${DEVICE}"
        fi
    fi
 fi
