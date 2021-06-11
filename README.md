@@ -24,7 +24,7 @@ Run ```. buildScript/build.sh -h``` for help
 * Example: ```. buildScript/build.sh -d sanders -c -l -t --derp```
 
 ## Needed parameters
-Open build.sh and set the needed parameters for your rom.
+Open variables.conf and set the needed parameters for your rom.
 * **Note**: If you set DEVICE paramater then *do not* use **-d** or **--device** flag.
 
 * **Note**: If you have not set the TOKEN and CHAT in telegram script,

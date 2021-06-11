@@ -17,40 +17,15 @@
 
 #!/bin/bash
 
-# ===================================
-# Set the parameters below
+# ==================================
 
-# You need to set device by flag or set below
-DEVICE="sanders"
-
-# Set the lunch command
-# Example: If °lunch aosp_sanders-userdebug°
-# Then         lunch LUNCH_DEVICE-TYPE
-# TYPE is userdebug by default
-LUNCH=""
-TYPE="userdebug"
-
-# Set the mka command
-# Default is mka bacon
-MKA="mka bacon"
-
-# Set your Rom's final zip name Initial words
-# Used for detecting zip name
-# Example: If Rom's zip name is
-# AOSP-10.0-20200607.zip then
-# RNAME="AOSP"
-RNAME=""
+# Include parameters
+. buildScript/variables.conf
 
 # Do not change below
 FNAME="$RNAME*.zip"
 ROM="$RNAME"
 
-# Set your telegram username below
-# If Your username is @marshmello_61
-# Then set marshmello\_61
-TGNAME=""
-
-# Setting parameters end here
 # ===================================
 
 CLEAN=""
