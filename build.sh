@@ -146,9 +146,9 @@ fi
 if [ -z "${ROM}" ]
 then
    echo " "
-   echo "Looks like you did not have any rom to build"
+   echo "Didn't you just forget to enter the name of the ROM you were tryna build? Huh?"
    sleep 3
-   echo "Now on prompt just enter the thing you do for lunching rom"
+   echo "Fine Nvm, Just Tell the name now!"
    sleep 3
    echo " "
    echo "Example: if you do °lunch aosp_sanders-userdebug° then"
@@ -185,27 +185,27 @@ ZIP=$(basename $ZIP_PATH)
 
 # Say hello to your master
 echo " "
-echo "Hey Master, how are you ? Hope you having a good day..."
+echo "Heyy ${TGNAME}, how's it goin'? Hope you're fine! Now let's get to some work shall we?"
 echo " "
 
 # If file exsists then prompt to upload it, then prompt to delete existing file
 if [ -z ${ZIP_PATH} ]
 then
-   echo "File not exists"
-   sleep 3
+   echo "Let me check...umm.. I don't see any file in there..."
+   sleep 2
    mkdir file
 else
-   echo "Your handmade Rom file exists"
+   echo "Welp! I found a build in there!"
    if [[ "${UPLOAD}" == "upload" ]]; then
-       read -e -p "Do you want me to upload file? [y/n] " choice
+       read -e -p "Want me to upload it? [y/n] " choice
        [[ "$choice" == [Yy]* ]] && echo "Uploading file...." && gdrive upload ${ZIP_PATH} && echo " " || echo "Okay master"
    fi
-   read -e -p "Do you want me to delete the existing file? [y/n] " choice
+   read -e -p "Umm okay, then should I just delete it? [y/n] " choice
    [[ "$choice" == [Yy]* ]] && echo "Deleting file...." && rm -rf ${ZIP_PATH} && echo " " && mkdir file || echo "that was a no, keeping file"
 fi
 
 if [[ "${TG}" == "tg" ]]; then
-    . buildScript/telegram "Hey, everyone. The build script for ${RNAME} is started"
+    . buildScript/telegram "Heyy Guys! ${TGNAME} has started building ${RNAME} for ${DEVICE}"
 fi
 
 # Create a empty directory so further decisions should be taken
@@ -219,13 +219,13 @@ then
        echo "Clean building"
        rm -rf out
        if [[ "${TG}" == "tg" ]]; then
-           . buildScript/telegram "Good news everyone. Clean build of ${RNAME} started."$'\n'"If no error, it will be ready in some hours."$'\n'"Device: ${DEVICE}"
+           . buildScript/telegram "He'll be clean building ${RNAME}, might take few hours (if no error xD)"$'\n'"I'll let you know once it's done, I'm keeping a watch on it"
        fi
    else
        echo " "
        echo "Dirty building"
        if [[ "${TG}" == "tg" ]]; then
-           . buildScript/telegram "Good news everyone. Dirty build of ${RNAME} started."$'\n'"It can be ready at anytime."$'\n'"Device: ${DEVICE}"
+           . buildScript/telegram "He's just dirty building, it'll be done soon, wait for it"
        fi
    fi
 fi
@@ -251,13 +251,13 @@ then
          echo "Hey master, your build is done and ready to upload"
          if [[ "${TG}" == "tg" ]]; then
              if [[ "${UPLOAD}" == "upload" ]]; then
-                 . buildScript/telegram "Well, the build is successful."$'\n'"Prompting to @${TGNAME} for uploading build"
+                 . buildScript/telegram "Welp, build is successful."$'\n'"Let me inform ${TGNAME} to Upload it!"
              fi
          fi
          echo ""
          if [[ "${UPLOAD}" == "upload" ]]; then
              read -e -p "Do you want me to upload file for you? [y/n] " choice
-             [[ "$choice" == [Yy]* ]] && gdrive upload ${ZIP_PATH} && echo "Go and grab that shit from your gdrive" || echo "Fine. Upload it manually"
+             [[ "$choice" == [Yy]* ]] && gdrive upload ${ZIP_PATH} && echo "Checking Gdrive wen? kthnxbye" || echo "Well, your choice! I go awei"
          fi
 
          FILENAME='```'$''$ZIP$'''```'
@@ -271,7 +271,8 @@ then
          # Telegram message only if upload exists
          if [[ "${TG}" == "tg" ]]; then
              if [[ "${UPLOAD}" == "upload" ]]; then
-                 . buildScript/telegram -M "The build is uploaded to @${TGNAME}'s gdrive."$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${FILENAME}"$'\n'"Size- ${sizee}"$'\n'"md5sum- ${md5summ}"$'\n'" "$'\n'"If you wanna test, just tag @${TGNAME}"
+                 . buildScript/telegram -M "The test build is up now!"$'\n'" "$'\n'"Uploaded file details:"$'\n'"Name- ${FILENAME}"$'\n'"Size- ${sizee}"$'\n'"md5sum- ${md5summ}"$'\n'" "$'\n'"If you wanna test, just PM @${TGNAME} or ping him in his support group!"
+                 . buildScript/telegram "I'll see y'all again when ${TGNAME} makes a new build, Bye!"
              fi
          fi
          # Telegram message only if upload not exists
@@ -282,23 +283,25 @@ then
          fi
       else
          echo "Oopsemiee. Looks like something interrupted building"
-         echo "If that wasn't you, then it's something wrong"
-         echo "Try solving the error and run me again"
+         echo "If that wasn't you, then something fucked up"
+         echo "Well whatever it is, fix it and we'll start building again!"
          if [[ "${LOG}" == "log" ]]; then
              if  [[ -f "out/error.log" ]] && [[ -s "out/error.log" ]]; then
                   if [[ "${TG}" == "tg" ]]; then
-                      . buildScript/telegram "Bad news :(. The build has any error in compiling"$'\n'" "$'\n'"@${TGNAME} fix this."
-                      . buildScript/telegram -f out/error.log | tee
+                      . buildScript/telegram "Ooof, looks like Something fucked up, let me inform ${TGNAME} about it and he'll just fix it up!"
+                      cp out/error.log out/$RNAME-$DEVICE-error.log
+                      . buildScript/telegram -f out/$RNAME-$DEVICE-error.log | tee
+                      rm -rf out/$RNAME-$DEVICE-error.log
                   fi
-                  echo -n "Read log?: "
+                  echo -n "Read log?[y/n]: "
                   read log
                   if [[ "${log}" == 'y' ]]; then
-                      echo "Opening error log file" && sleep 5
+                      echo "Opening error log file" && sleep 3
                       nano out/error.log
                   fi
              else
                   if [[ "${TG}" == "tg" ]]; then
-                      . buildScript/telegram "Build has cancelled by @${TGNAME}"
+                      . buildScript/telegram "Well looks like @${TGNAME} isn't in the mood to make a build right now, whenever he is, I'll inform y'all!"
                   fi
              fi
          fi
