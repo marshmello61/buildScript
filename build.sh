@@ -73,7 +73,7 @@ Mandatory Parameters:
 Optional Parameters:
     -c, --clean           clean build directory before compilation
     -l, --log             perform logging of compilation
-    -u, --upload          for using gdrive as upload
+    -u, --upload          for using transfersh as upload
     --derp                builds DerpFest
     --evo                 builds Evolution-X
     -t, --tg              sends telegram notification *use it only
@@ -172,11 +172,37 @@ then
 else
    echo "Welp! I found a build in there!"
    if [[ "${UPLOAD}" == "upload" ]]; then
-       read -e -p "Want me to upload it? [y/n] " choice
-       [[ "$choice" == [Yy]* ]] && echo "Uploading file...." && gdrive upload ${ZIP_PATH} && echo " " || echo "Okay master"
+       echo -n "Want me to upload it? [y/n]: "
+       read choice
+       if [[ "$choice" == [Yy]* ]]; then
+          echo "Uploading file...."
+          curl --upload-file $ZIP_PATH https://transfer.sh/$ZIP
+          echo " "
+       elif [[ "$choice" == [Nn]* ]]; then
+          echo "Okay master"
+          pupload=n
+       else
+          echo "Wrong answer. Aborting upload"
+          pupload=n
+       fi
    fi
-   read -e -p "Umm okay, then should I just delete it? [y/n] " choice
-   [[ "$choice" == [Yy]* ]] && echo "Deleting file...." && rm -rf ${ZIP_PATH} && echo " " && mkdir file || echo "that was a no, keeping file"
+   echo -n "Umm okay, then should I just delete it? [y/n]: "
+   read choice
+   if [[ "$choice" == [Yy]* ]] || [[ "$pupload" == "n"]]; then
+      echo "Deleting file...."
+      rm -rf ${ZIP_PATH}
+      echo " "
+      mkdir file
+   elif [[ "$choice" == [Nn]* ]]; then
+      echo "that was a no, keeping file"
+   else
+      echo "Wrong answer"
+   fi
+fi
+
+if [[ "$pupload" == "n"]]; then
+   echo "Force deleted the old $ZIP file"
+   echo ""
 fi
 
 if [[ "${TG}" == "tg" ]]; then
@@ -231,8 +257,16 @@ then
          fi
          echo ""
          if [[ "${UPLOAD}" == "upload" ]]; then
-             read -e -p "Do you want me to upload file for you? [y/n] " choice
-             [[ "$choice" == [Yy]* ]] && gdrive upload ${ZIP_PATH} && echo "Checking Gdrive wen? kthnxbye" || echo "Well, your choice! I go awei"
+             echo -n "Do you want me to upload file for you? [y/n]: "
+             read choice
+             if [[ "$choice" == [Yy]* ]]; then
+                curl --upload-file $ZIP_PATH https://transfer.sh/$ZIP
+                echo "Link provided below? Yes? kthnxbye"
+             elif [[ "$choice" == [Nn]* ]]; then
+                echo "Well, your choice! I go awei"
+             else
+                echo "Unknown parameter found. Aborting upload"
+             fi
          fi
 
          FILENAME='```'$''$ZIP$'''```'

@@ -1,6 +1,6 @@
 # buildScript
 Just a script for compiling ROMs.
-This script uses *gdrive* (check https://github.com/marshmello61/gdrive) currently for uploading.
+This script uses *transfer.sh* (check https://transfer.sh/) currently for uploading.
 Uses *fabianonline's telegram* script (check https://github.com/fabianonline/telegram.sh).
 
 ## Flags needed
@@ -14,7 +14,7 @@ Run ```. buildScript/build.sh -h``` for help
 * **-c** or **--clean**        :            for clean build
 * **-l** or **--log**          :            to view error log if failed
 * **-t** or **--tg**           :            to send telegram messages **set TOKEN and CHAT in telegram script**
-* **-u** or **--upload**       :            for uploading build ** *uses gdrive* **
+* **-u** or **--upload**       :            for uploading build ** *uses transfersh* **
 * **-h** or **--help**         :            for help
 
 * **Special flags** (*ONLY* do if you build following rom, or else set paramter in build.sh)
