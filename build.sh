@@ -105,16 +105,16 @@ if [[ "${ROM}" == "derp" ]]; then
     echo " "
     echo "Setting up DerpFest parameters"
     LUNCH="derp"
-    MKA="mka kronic"
-    FNAME="Derp*.zip"
+    MKA="mka derp"
     RNAME="DerpFest"
+    FNAME="$RNAME*.zip"
 elif [[ "${ROM}" == "evo" ]]; then
     echo " "
     echo "Setting up Evolution-X parameters"
-    LUNCH="aosp"
-    MKA="mka bacon"
-    FNAME="Evol*.zip"
-    RNAME="Evolution-X"
+    LUNCH="evolution"
+    MKA="mka evolution"
+    RNAME="$LUNCH"
+    FNAME="$RNAME*.zip"
 fi
 
 # If ROM is empty then ask for it
